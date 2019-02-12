@@ -9,13 +9,13 @@ The main purpose is to easily create a new project with everything you need auto
 
 ## Features
 
-- [x] Webapp : Create a webapp workspace
-    - [x] PHP 
-    - [x] MySQL
-    - [x] Apache
-    - [] NGINX
-    - [] PostgreSQL
-    - [] NodeJS
+-[x] Webapp : Create a webapp workspace
+    -[x] PHP 
+    -[x] MySQL
+    -[x] Apache
+    -[] NGINX
+    -[] PostgreSQL
+    -[] NodeJS
 
 ## Install
 
