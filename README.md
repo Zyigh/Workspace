@@ -60,4 +60,4 @@ Wait for a MVP before doing so :)
 
 ## License
 
-[License can be found here](./License)
+[License can be found here](https://github.com/Zyigh/Workspace/blob/master/LICENSE)
