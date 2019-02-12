@@ -1,0 +1,13 @@
+#!/usr/bin/env bash
+
+if [ -z $1 ]; then
+    echo 'No user specified. Connecting as root'
+    sleep 2
+    myuser="root"
+else
+    echo "Connection as $1"
+    sleep 2
+    myuser=$1
+fi
+
+docker run -it --link database:database --rm mysql sh -c "exec mysql -hdatabase -u${myuser}"

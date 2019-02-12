@@ -1,0 +1,21 @@
+mysql:
+  build: ./bin/mysql/
+  container_name: database
+  ports:
+    - 3306:3306
+  expose:
+    - 3306
+  volumes:
+    - ~/.workspace/databases/mysql:/var/lib/mysql
+
+apache:
+  build: ./bin/apache/
+  container_name: phpapache
+  ports:
+    - 8888:80
+  expose:
+    - 8888
+  volumes:
+    - ./:/var/www/html
+  links:
+    - mysql
