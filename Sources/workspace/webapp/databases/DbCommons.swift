@@ -10,6 +10,14 @@ import Foundation
 class DbCommons {
     static let persistanceDirectory = Setup.defaultDirForSetups + "/databases"
     
+    static func invalidUrlFileHandler() {
+        print("""
+            It seems there is a problem with the setup folder '\(persistanceDirectory)' needed to setup the project.
+            Please report it as an issue at \(repoUrl) !
+            """)
+        exit(1)
+    }
+    
     static func installDefaultDir() {
         persistanceDirectory.checkKindOfFile() {
             kind in
@@ -27,12 +35,28 @@ class DbCommons {
                 print("Creating \(persistanceDirectory), to save databases")
                 persistanceDirectory.createDir()
             case .isNotAPath :
-                print("""
-                    It seems there is a problem with the setup folder '\(persistanceDirectory)' needed to setup the project.
-                    Please report it as an issue at \(repoUrl) !
-                    """)
-                exit(1)
+                invalidUrlFileHandler()
             }
         }
+    }
+    
+    static func hasBeenInstalled() -> Bool {
+        var isInstalled = false
+        persistanceDirectory.checkKindOfFile() {
+            kind in
+            
+            switch kind {
+            case .isDir:
+                isInstalled = true
+            case .isFile:
+                isInstalled = false
+            case .doesNotExist:
+                isInstalled = false
+            case .isNotAPath:
+                invalidUrlFileHandler()
+            }
+        }
+        
+        return isInstalled
     }
 }

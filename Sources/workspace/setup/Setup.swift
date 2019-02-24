@@ -11,6 +11,14 @@ import Guaka
 class Setup {
     static let defaultDirForSetups = "~/.zwsp".expand
     
+    static func invalidUrlFileHandler() {
+        print("""
+            It seems there is a problem with the setup folder '\(Setup.defaultDirForSetups)' needed to setup the project.
+            Please report it as an issue at \(repoUrl) !
+            """)
+        exit(1)
+    }
+    
     public static func hasBeenInstalled() -> Bool {
         var isInstalled = false
         defaultDirForSetups.checkKindOfFile() {
@@ -24,8 +32,7 @@ class Setup {
             case .doesNotExist:
                 isInstalled = false
             case .isNotAPath:
-                print("Problem with base setup directory : It doesn't seem to be a valid path")
-                exit(1)
+                invalidUrlFileHandler()
             }
         }
         
@@ -50,11 +57,7 @@ class Setup {
                 print("Creating \(Setup.defaultDirForSetups), default directory for setups")
                 Setup.defaultDirForSetups.createDir()
             case .isNotAPath :
-                print("""
-                    It seems there is a problem with the setup folder '\(Setup.defaultDirForSetups)' needed to setup the project.
-                    Please report it as an issue at \(repoUrl) !
-                """)
-                exit(1)
+                invalidUrlFileHandler()
             }
         }
         DbCommons.installDefaultDir()
@@ -62,7 +65,8 @@ class Setup {
     }
     
     public static func checkIfInstalled() {
-        if !Setup.hasBeenInstalled() {
+        if !Setup.hasBeenInstalled()
+            || !DbCommons.hasBeenInstalled() {
             print("""
         Workspace seems to not be installed. You can easily install it by running :
         workspace setup
