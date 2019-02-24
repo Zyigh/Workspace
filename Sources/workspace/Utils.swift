@@ -8,6 +8,8 @@
 import Foundation
 import Guaka
 
+let repoUrl = "https://github.com/Zyigh/Workspace"
+
 protocol CommandSetup {
     static func getCommand() -> Command
     static func getSetupFlags() -> [Flag]
@@ -22,15 +24,15 @@ enum KindOfFile {
 }
 
 extension String {
-    func createDir(_ path:String){
+    func createDir() {
         do {
-            try FileManager.default.createDirectory(atPath: path, withIntermediateDirectories: true, attributes: nil)
+            try FileManager.default.createDirectory(atPath: self, withIntermediateDirectories: true, attributes: nil)
         } catch let error as NSError {
             NSLog("Unable to create directory \(error.debugDescription)")
         }
     }
     
-    var expand:String {return NSString(string: self).expandingTildeInPath}
+    var expand:String { return NSString(string: self).expandingTildeInPath }
     
     func checkKindOfFile(completion: @escaping (KindOfFile)->Void) {
         guard nil != URL(string: self) else {

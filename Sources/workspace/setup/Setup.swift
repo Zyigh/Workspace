@@ -11,6 +11,14 @@ import Guaka
 class Setup {
     static let defaultDirForSetups = "~/.zwsp".expand
     
+    static func invalidUrlFileHandler() {
+        print("""
+            It seems there is a problem with the setup folder '\(Setup.defaultDirForSetups)' needed to setup the project.
+            Please report it as an issue at \(repoUrl) !
+            """)
+        exit(1)
+    }
+    
     public static func hasBeenInstalled() -> Bool {
         var isInstalled = false
         defaultDirForSetups.checkKindOfFile() {
@@ -24,8 +32,7 @@ class Setup {
             case .doesNotExist:
                 isInstalled = false
             case .isNotAPath:
-                print("Problem with base setup directory : It doesn't seem to be a valid path")
-                exit(1)
+                invalidUrlFileHandler()
             }
         }
         
@@ -33,11 +40,33 @@ class Setup {
     }
     
     public static func install() {
-        print("Processing installation")
+        print("Processing installation...")
+        Setup.defaultDirForSetups.checkKindOfFile() {
+            kind in
+            
+            switch kind {
+            case .isDir :
+                print("\(Setup.defaultDirForSetups) already exists")
+            case .isFile :
+                print("""
+                    \(Setup.defaultDirForSetups) already exists but is a file.
+                    Please rename it to setup project properly
+                """)
+                exit(2)
+            case .doesNotExist :
+                print("Creating \(Setup.defaultDirForSetups), default directory for setups")
+                Setup.defaultDirForSetups.createDir()
+            case .isNotAPath :
+                invalidUrlFileHandler()
+            }
+        }
+        DbCommons.installDefaultDir()
+        print("Done !")
     }
     
     public static func checkIfInstalled() {
-        if !Setup.hasBeenInstalled() {
+        if !Setup.hasBeenInstalled()
+            || !DbCommons.hasBeenInstalled() {
             print("""
         Workspace seems to not be installed. You can easily install it by running :
         workspace setup
