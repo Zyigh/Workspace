@@ -34,10 +34,30 @@ class Setup {
     
     public static func install() {
         print("Processing installation...")
-        print("Creating \(Setup.defaultDirForSetups), default directory for setups")
-        Setup.defaultDirForSetups.createDir()
-        print("Creating \(DbCommons.persistanceDirectory), to save databases")
-        DbCommons.persistanceDirectory.createDir()
+        Setup.defaultDirForSetups.checkKindOfFile() {
+            kind in
+            
+            switch kind {
+            case .isDir :
+                print("\(Setup.defaultDirForSetups) already exists")
+            case .isFile :
+                print("""
+                    \(Setup.defaultDirForSetups) already exists but is a file.
+                    Please rename it to setup project properly
+                """)
+                exit(2)
+            case .doesNotExist :
+                print("Creating \(Setup.defaultDirForSetups), default directory for setups")
+                Setup.defaultDirForSetups.createDir()
+            case .isNotAPath :
+                print("""
+                    It seems there is a problem with the setup folder '\(Setup.defaultDirForSetups)' needed to setup the project.
+                    Please report it as an issue at \(repoUrl) !
+                """)
+                exit(1)
+            }
+        }
+        DbCommons.installDefaultDir()
         print("Done !")
     }
     
