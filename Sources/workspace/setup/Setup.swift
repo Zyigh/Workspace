@@ -33,7 +33,12 @@ class Setup {
     }
     
     public static func install() {
-        print("Processing installation")
+        print("Processing installation...")
+        print("Creating \(Setup.defaultDirForSetups), default directory for setups")
+        Setup.defaultDirForSetups.createDir()
+        print("Creating \(DbCommons.persistanceDirectory), to save databases")
+        DbCommons.persistanceDirectory.createDir()
+        print("Done !")
     }
     
     public static func checkIfInstalled() {
