@@ -19,16 +19,36 @@ class Webapp {
     func execute() {
         print("execution !!")
     }
+    
+    enum SupportedLanguages : String {
+        case php = "php"
+        case js = "js"
+    }
 }
 
 extension Webapp : CommandSetup {
-    private static func getLanguage() -> Flag {
+    private static func getLanguageFlag() -> Flag {
         return Flag(shortName: "l", longName: "language", type: String.self, description: "Language used in webapp", required: true, repeatable: false, inheritable: false)
+    }
+    
+    private static func handleLanguage(languages: Flag) {
+        if let lang = languages.values.first as? String,
+            let l = SupportedLanguages(rawValue: lang) {
+            switch l {
+            case .php:
+                print(Php.test)
+            case .js:
+                print("LOOOOOOSEEEEERRR")
+            }
+        } else {
+            print("Something went wrong. Expected language, got \(languages.values.first ?? "nil")")
+            exit(1)
+        }
     }
     
     static func getSetupFlags() -> [Flag] {
         var flags = [Flag]()
-        flags.append(getLanguage())
+        flags.append(getLanguageFlag())
         
         return flags
     }
@@ -38,7 +58,9 @@ extension Webapp : CommandSetup {
             flags, args in
             
             Setup.checkIfInstalled()
-            print(flags)
+            if let languages = flags["language"] {
+                handleLanguage(languages: languages)
+            }
             
             let webapp = Webapp(flags: flags, args: args)
             webapp.execute()
