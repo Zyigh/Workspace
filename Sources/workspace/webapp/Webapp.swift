@@ -22,7 +22,7 @@ class Webapp {
     
     enum SupportedLanguages : String {
         case php = "php"
-        case js = "js"
+        case unrecognized
     }
 }
 
@@ -32,14 +32,17 @@ extension Webapp : CommandSetup {
     }
     
     private static func handleLanguage(languages: Flag) {
-        if let lang = languages.values.first as? String,
-            let l = SupportedLanguages(rawValue: lang) {
+        if let lang = languages.values.first as? String {
+            let l = SupportedLanguages(rawValue: lang) ?? SupportedLanguages.unrecognized
+            let handler: LanguageStrategy
             switch l {
             case .php:
-                print(Php.test)
-            case .js:
-                print("LOOOOOOSEEEEERRR")
+                handler = Php()
+            case .unrecognized:
+                handler = NotAvailableLanguage(lang: lang)
             }
+
+            Language(handler).test()
         } else {
             print("Something went wrong. Expected language, got \(languages.values.first ?? "nil")")
             exit(1)

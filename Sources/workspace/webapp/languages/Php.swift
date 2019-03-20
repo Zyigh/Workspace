@@ -8,6 +8,8 @@
 import Foundation
 import Guaka
 
-class Php {
-    static let test = "It works !"
+class Php : NSObject, LanguageStrategy {
+    public func test() {
+        print("Péacheupait")
+    }
 }
