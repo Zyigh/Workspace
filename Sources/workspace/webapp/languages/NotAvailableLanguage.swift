@@ -16,5 +16,6 @@ class NotAvailableLanguage: NSObject, LanguageStrategy {
               Language "\(wrongLanguage)" is not implemented yet. 
               Feel free to contribute or please submit an issue !
               """)
+        exit(2)
     }
 }

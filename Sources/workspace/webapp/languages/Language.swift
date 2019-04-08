@@ -14,4 +14,8 @@ class Language {
     public func test() {
         return language.test()
     }
+
+    public func writeDockerfile() {
+        var langDockerfile = language.generateDockerfile()
+    }
 }
