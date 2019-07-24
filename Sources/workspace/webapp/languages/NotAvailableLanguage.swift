@@ -3,6 +3,7 @@
 //
 
 import Foundation
+import Stencil
 
 class NotAvailableLanguage: NSObject, LanguageStrategy {
     let wrongLanguage: String
@@ -14,8 +15,12 @@ class NotAvailableLanguage: NSObject, LanguageStrategy {
     public func test() {
         print("""
               Language "\(wrongLanguage)" is not implemented yet. 
-              Feel free to contribute or please submit an issue !
+              Feel free to contribute or please submit an issue @ https://github.com/Zyigh/Workspace/ !
               """)
         exit(2)
+    }
+
+    public func generateDockerfileContext() -> [String: Any] {
+        return [:]
     }
 }

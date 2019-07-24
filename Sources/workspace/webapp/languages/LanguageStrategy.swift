@@ -6,5 +6,5 @@ import Foundation
 
 protocol LanguageStrategy {
     func test()
-    func generateDockerfile() -> String
+    func generateDockerfileContext() -> [String: Any]
 }

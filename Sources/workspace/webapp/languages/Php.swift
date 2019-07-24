@@ -7,9 +7,14 @@
 
 import Foundation
 import Guaka
+import Stencil
 
 class Php : NSObject, LanguageStrategy {
     public func test() {
         print("Péacheupait")
+    }
+
+    public func generateDockerfileContext() -> [String: Any] {
+        return ["language": "PHP"]
     }
 }

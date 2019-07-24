@@ -3,12 +3,16 @@
 //
 
 import Foundation
+import Stencil
 
 class Language {
     let language: LanguageStrategy
+    let environment : Environment
 
     init(_ l: LanguageStrategy) {
         language = l
+        let fsLoader = FileSystemLoader(paths: ["templates/"])
+        environment = Environment(loader: fsLoader)
     }
 
     public func test() {
@@ -16,6 +20,12 @@ class Language {
     }
 
     public func writeDockerfile() {
-        var langDockerfile = language.generateDockerfile()
+        let context = language.generateDockerfileContext()
+        do {
+            let dockerfile = try environment.renderTemplate(name: "template.Dockerfile", context: context)
+            print(dockerfile)
+        } catch let e {
+            print(e.localizedDescription)
+        }
     }
 }

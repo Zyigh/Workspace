@@ -42,7 +42,7 @@ extension Webapp : CommandSetup {
                 handler = NotAvailableLanguage(lang: lang)
             }
 
-            Language(handler).test()
+            Language(handler).writeDockerfile()
         } else {
             print("Something went wrong. Expected language, got \(languages.values.first ?? "nil")")
             exit(1)
