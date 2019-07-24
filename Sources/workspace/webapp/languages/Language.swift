@@ -21,6 +21,15 @@ class Language {
 
     public func writeDockerfile() {
         let context = language.generateDockerfileContext()
+        if context.count < 1 {
+            if let l = language as? NotAvailableLanguage {
+                l.notImplementedError()
+            } else {
+                print("Error occurred, please don't do that again...")
+                exit(1)
+            }
+        }
+
         do {
             let dockerfile = try environment.renderTemplate(name: "template.Dockerfile", context: context)
             print(dockerfile)

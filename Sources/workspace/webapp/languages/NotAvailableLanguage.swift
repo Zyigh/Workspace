@@ -12,11 +12,16 @@ class NotAvailableLanguage: NSObject, LanguageStrategy {
        wrongLanguage = lang
     }
 
-    public func test() {
+    public func notImplementedError() {
         print("""
               Language "\(wrongLanguage)" is not implemented yet. 
               Feel free to contribute or please submit an issue @ https://github.com/Zyigh/Workspace/ !
               """)
+        exit(2)
+    }
+
+    public func test() {
+        print("Not Available !!!")
         exit(2)
     }
 
