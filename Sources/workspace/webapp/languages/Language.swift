@@ -19,6 +19,10 @@ class Language {
         return language.test()
     }
 
+    public func putDockerfileAtDestination(_ dockerfile: String) {
+        print(dockerfile)
+    }
+
     public func writeDockerfile() {
         let context = language.generateDockerfileContext()
         if context.count < 1 {
@@ -32,7 +36,7 @@ class Language {
 
         do {
             let dockerfile = try environment.renderTemplate(name: "template.Dockerfile", context: context)
-            print(dockerfile)
+            putDockerfileAtDestination(dockerfile)
         } catch let e {
             print(e.localizedDescription)
         }

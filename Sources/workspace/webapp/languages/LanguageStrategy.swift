@@ -5,6 +5,7 @@
 import Foundation
 
 protocol LanguageStrategy {
+    var context: LanguageContext { get }
     func test()
     func generateDockerfileContext() -> [String: Any]
 }

@@ -6,14 +6,8 @@
 //
 
 import Foundation
-import Guaka
 
 let repoUrl = "https://github.com/Zyigh/Workspace"
-
-protocol CommandSetup {
-    static func getCommand() -> Command
-    static func getSetupFlags() -> [Flag]
-}
 
 // File and Dirs manager
 enum KindOfFile {

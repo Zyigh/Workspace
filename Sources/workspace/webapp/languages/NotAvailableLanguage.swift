@@ -6,6 +6,8 @@ import Foundation
 import Stencil
 
 class NotAvailableLanguage: NSObject, LanguageStrategy {
+    // Just to implement protocol, nothin useful here
+    var context = LanguageContext(hasWorkdir: false, steps: [], language: "", cmd: nil)
     let wrongLanguage: String
 
     init(lang: String) {
