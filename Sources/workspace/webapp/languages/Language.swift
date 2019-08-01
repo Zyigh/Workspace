@@ -5,6 +5,12 @@
 import Foundation
 import Stencil
 
+typealias Dirname = String
+struct Tree {
+    let filename: [String]
+    let children: [Dirname: Tree]?
+}
+
 class Language {
     let language: LanguageStrategy
     let environment : Environment

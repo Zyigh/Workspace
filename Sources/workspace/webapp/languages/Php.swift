@@ -28,6 +28,8 @@ class Php : NSObject, LanguageStrategy {
             cmd: nil
     )
 
+    var tree = Tree(filename: ["index.php"], children: ["public": Tree(filename: ["index.php"], children: nil)])
+
     public func test() {
         print("Péacheupait")
     }
