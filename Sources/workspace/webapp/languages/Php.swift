@@ -9,7 +9,9 @@ import Foundation
 import Guaka
 import Stencil
 
+// Strategy for PHP language
 class Php : NSObject, LanguageStrategy {
+    // Base for Stencil context to generate PHP Dockerfile
     var context = LanguageContext(
             hasWorkdir: true,
             steps: [
@@ -28,12 +30,16 @@ class Php : NSObject, LanguageStrategy {
             cmd: nil
     )
 
+    // The file tree of a project that uses PHP
     var tree = Tree(filename: ["index.php"], children: ["public": Tree(filename: ["index.php"], children: nil)])
 
+    // useless func
     public func test() {
         print("Péacheupait")
     }
 
+    // @Todo handle appropriate changes if PHP AND Apache are selected at the same time.
+    // Might disappear
     public func generateDockerfileContext() -> [String: Any] {
         return context.toStringAny()
     }
