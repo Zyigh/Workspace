@@ -31,7 +31,17 @@ class Php : NSObject, LanguageStrategy {
     )
 
     // The file tree of a project that uses PHP
-    var tree = Tree(filename: ["index.php"], children: ["public": Tree(filename: ["index.php"], children: nil)])
+    var tree = Tree(
+        files: [(name: "index.php", content: nil)],
+        children: [(
+            dirname: "public", 
+            tree: Tree(files: [(name: "index.php", content: """
+                <?php
+                                                            
+                require_once __DIR__ . "../index.php";                                            
+            """)])
+        )]
+    )
 
     // useless func
     public func test() {

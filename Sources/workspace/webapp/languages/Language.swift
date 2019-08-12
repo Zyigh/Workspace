@@ -5,11 +5,18 @@
 import Foundation
 import Stencil
 
-typealias Dirname = String
 // The files Tree for the project which is created
 struct Tree {
-    let filename: [String]
-    let children: [Dirname: Tree]?
+    typealias File = (name: String, content: String?)
+    typealias Directory = (dirname: String, tree: Tree)
+
+    let files: [File]
+    let children: [Directory]
+
+    init(files: [File], children: [Directory]? = nil) {
+        self.files = files
+        self.children = children ?? []
+    }
 }
 
 // Class that handle the Language used using a Language Strategy design pattern for specific language
@@ -18,6 +25,11 @@ class Language {
     let language: LanguageStrategy
     // Stencil prerequisit
     let environment : Environment
+    var tree : Tree {
+        get {
+            return language.tree
+        }
+    }
 
     // Set the language and the Environment for Stencil
     init(_ l: LanguageStrategy) {
@@ -53,6 +65,40 @@ class Language {
             putDockerfileAtDestination(dockerfile)
         } catch let e {
             print(e.localizedDescription)
+        }
+    }
+
+    public func createFiles(_ tree: Tree, from startPoint: String) {
+        for file in tree.files {
+            let newFilename = (startPoint + file.name).expand
+            newFilename.checkKindOfFile() { kind in
+                switch kind {
+                case .isNotAPath:
+                    print("\(newFilename) is not a valid path")
+                    exit(2)
+                case .isFile:
+                    print("\(newFilename) already exists")
+                default:
+                    FileManager.default.createFile(atPath: startPoint + file.name, contents: file.content?.data(using: .utf8))
+                }
+            }
+        }
+
+        for child in tree.children {
+            let newDirname = (startPoint + child.dirname).expand
+            newDirname.checkKindOfFile() { kind in
+                switch kind {
+                case .isNotAPath:
+                    print("\(newDirname) is not a valid path")
+                    exit(2)
+                case .doesNotExist:
+                    newDirname.createDir()
+                default:
+                    print("\(newDirname) already exists")
+                }
+
+                self.createFiles(child.tree, from: newDirname)
+            }
         }
     }
 }

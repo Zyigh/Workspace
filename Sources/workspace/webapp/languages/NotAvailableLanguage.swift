@@ -9,7 +9,7 @@ import Stencil
 class NotAvailableLanguage: NSObject, LanguageStrategy {
     // Just to implement protocol, nothin useful here
     var context = LanguageContext(hasWorkdir: false, steps: [], language: "", cmd: nil)
-    let tree = Tree(filename: [], children: nil)
+    let tree = Tree(files: [])
     // The language asked that is not implemented
     let wrongLanguage: String
 
