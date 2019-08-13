@@ -10,7 +10,7 @@ struct Tree {
     typealias File = (name: String, content: String?)
     typealias Directory = (dirname: String, tree: Tree)
 
-    let files: [File]
+    var files: [File]
     let children: [Directory]
 
     init(files: [File], children: [Directory]? = nil) {
@@ -34,22 +34,13 @@ class Language {
     // Set the language and the Environment for Stencil
     init(_ l: LanguageStrategy) {
         language = l
-        let fsLoader = FileSystemLoader(paths: ["templates/"])
+        // @Todo find a way to dinamycally get the path for templates or specify in doc to symlink the directory
+        let fsLoader = FileSystemLoader(paths: ["/Users/Zyigh/Desktop/workspace/templates/"])
         environment = Environment(loader: fsLoader)
     }
 
-    // Useless method to check that the basic is working
-    public func test() {
-        return language.test()
-    }
-
-    // @Todo put the Dockerfile at his destination in the tree created
-    public func putDockerfileAtDestination(_ dockerfile: String) {
-        print(dockerfile)
-    }
-
     // Create Dockerfile from language. Get an error if the language is not implemented
-    public func writeDockerfile() {
+    public func getDockerfile() -> String {
         let context = language.generateDockerfileContext()
         if context.count < 1 {
             if let l = language as? NotAvailableLanguage {
@@ -62,9 +53,10 @@ class Language {
 
         do {
             let dockerfile = try environment.renderTemplate(name: "template.Dockerfile", context: context)
-            putDockerfileAtDestination(dockerfile)
+            return dockerfile
         } catch let e {
             print(e.localizedDescription)
+            exit(1)
         }
     }
 
@@ -79,13 +71,13 @@ class Language {
                 case .isFile:
                     print("\(newFilename) already exists")
                 default:
-                    FileManager.default.createFile(atPath: startPoint + file.name, contents: file.content?.data(using: .utf8))
+                    FileManager.default.createFile(atPath: startPoint + "/" + file.name, contents: file.content?.data(using: .utf8))
                 }
             }
         }
 
         for child in tree.children {
-            let newDirname = (startPoint + child.dirname).expand
+            let newDirname = (startPoint + "/" + child.dirname).expand
             newDirname.checkKindOfFile() { kind in
                 switch kind {
                 case .isNotAPath:

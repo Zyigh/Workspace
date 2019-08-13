@@ -7,7 +7,6 @@
 
 import Foundation
 import Guaka
-import Stencil
 
 // Strategy for PHP language
 class Php : NSObject, LanguageStrategy {
@@ -32,21 +31,17 @@ class Php : NSObject, LanguageStrategy {
 
     // The file tree of a project that uses PHP
     var tree = Tree(
-        files: [(name: "index.php", content: nil)],
+        files: [(name: "index.php", content: "<?php\n")],
         children: [(
             dirname: "public", 
             tree: Tree(files: [(name: "index.php", content: """
-                <?php
-                                                            
-                require_once __DIR__ . "../index.php";                                            
+            <?php
+                                                        
+            require_once __DIR__ . "../index.php";
+
             """)])
         )]
     )
-
-    // useless func
-    public func test() {
-        print("Péacheupait")
-    }
 
     // @Todo handle appropriate changes if PHP AND Apache are selected at the same time.
     // Might disappear

@@ -11,13 +11,28 @@ import Guaka
 class Webapp {
     let flags: Flags
     let args: [String]
-    
+    var language: Language? = nil
+    static var currentDirectory = ""
+
     init(flags: Flags, args: [String]) {
         self.flags = flags
         self.args = args
+        Webapp.currentDirectory = FileManager.default.currentDirectoryPath
+        if let newProjectName = args.first {
+            newProjectName.expand.createDir()
+            Webapp.currentDirectory = newProjectName
+        }
     }
+
     func execute() {
-        print("execution !!")
+        guard let language = language else {
+            print("No language was selected")
+            exit(1)
+        }
+
+        var languageTree = language.tree
+        languageTree.files.append((name: "Dockerfile", content: language.getDockerfile()))
+        language.createFiles(languageTree, from: Webapp.currentDirectory)
     }
     
     enum SupportedLanguages : String {
@@ -31,7 +46,7 @@ extension Webapp : CommandSetup {
         return Flag(shortName: "l", longName: "language", type: String.self, description: "Language used in webapp", required: true, repeatable: false, inheritable: false)
     }
     
-    private static func handleLanguage(languages: Flag) {
+    private static func handleLanguage(languages: Flag) -> Language {
         if let lang = languages.values.first as? String {
             let l = SupportedLanguages(rawValue: lang) ?? SupportedLanguages.unrecognized
             let handler: LanguageStrategy
@@ -42,7 +57,7 @@ extension Webapp : CommandSetup {
                 handler = NotAvailableLanguage(lang: lang)
             }
 
-            Language(handler).writeDockerfile()
+            return Language(handler)
         } else {
             print("Something went wrong. Expected language, got \(languages.values.first ?? "nil")")
             exit(1)
@@ -61,11 +76,15 @@ extension Webapp : CommandSetup {
             flags, args in
             
             Setup.checkIfInstalled()
+            var language: Language? = nil
             if let languages = flags["language"] {
-                handleLanguage(languages: languages)
+                language = handleLanguage(languages: languages)
             }
             
             let webapp = Webapp(flags: flags, args: args)
+            if let l = language {
+                webapp.language = l
+            }
             webapp.execute()
         }
         webapp.add(flags: getSetupFlags())

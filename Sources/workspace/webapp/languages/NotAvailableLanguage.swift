@@ -27,12 +27,6 @@ class NotAvailableLanguage: NSObject, LanguageStrategy {
         exit(2)
     }
 
-    // Useless func to check behavior
-    public func test() {
-        print("Not Available !!!")
-        exit(2)
-    }
-
     // Useless func to conform to LanguageStrategy protocol
     public func generateDockerfileContext() -> [String: Any] {
         return [:]
