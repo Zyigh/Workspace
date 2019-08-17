@@ -10,6 +10,11 @@ import Guaka
 
 class Setup {
     static let defaultDirForSetups = "~/.zwsp".expand
+    static let setupDirs = [
+        defaultDirForSetups,
+        DbCommons.persistanceDirectory,
+        //Language.templateDir
+    ]
     
     static func invalidUrlFileHandler() {
         print("""
@@ -18,12 +23,12 @@ class Setup {
             """)
         exit(1)
     }
-    
-    public static func hasBeenInstalled() -> Bool {
-        var isInstalled = false
-        defaultDirForSetups.checkKindOfFile() {
+
+    private static func isDirInstalled(_ file: String) -> Bool {
+        var isInstalled: Bool = true
+        file.checkKindOfFile() {
             kind in
-            
+
             switch kind {
             case .isDir:
                 isInstalled = true
@@ -32,11 +37,18 @@ class Setup {
             case .doesNotExist:
                 isInstalled = false
             case .isNotAPath:
+                //exit with error + message
                 invalidUrlFileHandler()
             }
         }
-        
+
         return isInstalled
+    }
+
+    public static func hasBeenInstalled() -> Bool {
+        return setupDirs.reduce(into: true, { acc, dir in
+            acc = acc && isDirInstalled(dir)
+        })
     }
     
     public static func install() {
@@ -68,9 +80,9 @@ class Setup {
         if !Setup.hasBeenInstalled()
             || !DbCommons.hasBeenInstalled() {
             print("""
-        Workspace seems to not be installed. You can easily install it by running :
-        workspace setup
-    """)
+            Workspace seems to not be installed. You can easily install it by running :
+            workspace setup
+            """)
             exit(1)
         }
     }

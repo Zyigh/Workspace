@@ -32,7 +32,7 @@ class Webapp {
 
         var languageTree = language.tree
         languageTree.files.append((name: "Dockerfile", content: language.getDockerfile()))
-        language.createFiles(languageTree, from: Webapp.currentDirectory)
+        languageTree.createFiles(from: Webapp.currentDirectory)
     }
     
     enum SupportedLanguages : String {
