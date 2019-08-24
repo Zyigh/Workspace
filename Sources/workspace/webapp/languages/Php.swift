@@ -42,10 +42,4 @@ class Php : NSObject, LanguageStrategy {
             """)])
         )]
     )
-
-    // @Todo handle appropriate changes if PHP AND Apache are selected at the same time.
-    // Might disappear
-    public func generateDockerfileContext() -> [String: Any] {
-        return context.toStringAny()
-    }
 }

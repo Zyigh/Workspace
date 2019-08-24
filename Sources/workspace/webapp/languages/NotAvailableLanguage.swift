@@ -26,9 +26,4 @@ class NotAvailableLanguage: NSObject, LanguageStrategy {
               """)
         exit(2)
     }
-
-    // Useless func to conform to LanguageStrategy protocol
-    public func generateDockerfileContext() -> [String: Any] {
-        return [:]
-    }
 }
