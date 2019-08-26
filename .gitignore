@@ -1,3 +1,16 @@
+/Dockerfile
+notes
+notes/*
+Workspace.docker.notes.md
+
+### Swift Packagist
+
+.DS_Store
+/.build
+/Packages
+/*.xcodeproj
+Package.resolved
+
 # Created by .ignore support plugin (hsz.mobi)
 
 ### SublimeText template
